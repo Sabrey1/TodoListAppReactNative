@@ -13,6 +13,11 @@ class TodoCategoryController extends Controller
     public function index()
     {
         $todo_categories = TodoCategory::all();
+        if(!TodoCategory::all()){
+            return response()->json([
+                'message' => 'Todo categories cannot be found!!',
+            ]);
+        }
         return response()->json($todo_categories);
     }
 
@@ -25,12 +30,18 @@ class TodoCategoryController extends Controller
             'name' => 'required'
         ]);
 
-        $todo = new TodoCategory();
-        $todo->name = $request->name;
-        $todo->save();
+        if(TodoCategory::where('name', $request->name)->exists()){
+            return response()->json([
+                'message' => 'Todo category already exists!!',
+            ]);
+        }
+
+        $todoCategory = new TodoCategory();
+        $todoCategory->name = $request->name;
+        $todoCategory->save();
         return response()->json([
             'message' => 'Todo category created successfully!!',
-            'data' => $todo
+            'data' => $todoCategory
         ]);
     }
 
@@ -39,15 +50,20 @@ class TodoCategoryController extends Controller
      */
     public function update(Request $request, TodoCategory $todoCategory, $id)
     {
-        $todo = TodoCategory::find($id);
-        $todo = $request->validate([
-            'name ' => 'required'
+        $todoCategory = TodoCategory::find($id);
+        if(!TodoCategory::find($id)){
+            return response()->json([
+                'message' => 'Todo category not found!!',
+            ]);
+        }
+        $validated = $request->validate([
+            'name' => 'required'
         ]);
-        $todo->name = $request->name;
-        $todo->save();
+        $todoCategory->name = $request->name;
+        $todoCategory->save();
         return response()->json([
             'message' => 'Todo category updated successfully!!',
-            'data' => $todo
+            'data' => $todoCategory
         ]);
     }
 
@@ -57,6 +73,12 @@ class TodoCategoryController extends Controller
     public function destroy(TodoCategory $todoCategory, $id)
     {
         $todo = TodoCategory::find($id);
+
+        if(!TodoCategory::find($id)){
+            return response()->json([
+                'message' => 'Todo category not found!!',
+            ]);
+        }
         $todo->delete();
         return response()->json([
             'message' => 'Todo category deleted successfully!!',

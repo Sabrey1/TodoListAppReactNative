@@ -46,7 +46,7 @@ class TodosController extends Controller
     public function update(Request $request, Todos $todos, $id)
     {
         $todo = Todos::find($id);
-        $todo = $request->validate([
+        $req = $request->validate([
             'todo_category_id' => 'required',
             'title' => 'required',
             'due_date' => 'required',

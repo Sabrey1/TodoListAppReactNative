@@ -23,12 +23,12 @@ class TodoCategoryMappingController extends Controller
     {
         $validated = $request->validate([
             'todo_id' => 'required',
-            'category_id' => 'required'
+            'todo_category_id' => 'required'
         ]);
 
         $todo_category_mapping = new TodoCategotyMapping();
         $todo_category_mapping->todo_id = $request->todo_id;
-        $todo_category_mapping->category_id = $request->category_id;
+        $todo_category_mapping->todo_category_id = $request->todo_category_id;
         $todo_category_mapping->save();
         return response()->json([
             'message' => 'Todo category mapping created successfully!!',
@@ -41,17 +41,17 @@ class TodoCategoryMappingController extends Controller
      */
     public function update(Request $request, TodoCategotyMapping $todoCategotyMapping, $id)
     {
-        $todo = TodoCategotyMapping::find($id);
-        $todo = $request->validate([
+        $todoCategotyMapping = TodoCategotyMapping::find($id);
+        $validated = $request->validate([
             'todo_id' => 'required',
-            'category_id' => 'required'
+            'todo_category_id' => 'required'
         ]);
-        $todo->todo_id = $request->todo_id;
-        $todo->category_id = $request->category_id;
-        $todo->save();
+        $todoCategotyMapping->todo_id = $request->todo_id;
+        $todoCategotyMapping->todo_category_id = $request->todo_category_id;
+        $todoCategotyMapping->save();
         return response()->json([
             'message' => 'Todo category mapping updated successfully!!',
-            'data' => $todo
+            'data' => $todoCategotyMapping
         ]);
     }
 
