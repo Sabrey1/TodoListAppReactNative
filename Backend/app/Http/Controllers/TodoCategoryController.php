@@ -12,16 +12,8 @@ class TodoCategoryController extends Controller
      */
     public function index()
     {
-        $todo_categorycategory = TodoCategory::all();
-        return response()->json($todo_categorycategory);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $todo_categories = TodoCategory::all();
+        return response()->json($todo_categories);
     }
 
     /**
@@ -29,38 +21,46 @@ class TodoCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $validated = $request->validate([
+            'name' => 'required'
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TodoCategory $todoCategory)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TodoCategory $todoCategory)
-    {
-        //
+        $todo = new TodoCategory();
+        $todo->name = $request->name;
+        $todo->save();
+        return response()->json([
+            'message' => 'Todo category created successfully!!',
+            'data' => $todo
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TodoCategory $todoCategory)
+    public function update(Request $request, TodoCategory $todoCategory, $id)
     {
-        //
+        $todo = TodoCategory::find($id);
+        $todo = $request->validate([
+            'name ' => 'required'
+        ]);
+        $todo->name = $request->name;
+        $todo->save();
+        return response()->json([
+            'message' => 'Todo category updated successfully!!',
+            'data' => $todo
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TodoCategory $todoCategory)
+    public function destroy(TodoCategory $todoCategory, $id)
     {
-        //
+        $todo = TodoCategory::find($id);
+        $todo->delete();
+        return response()->json([
+            'message' => 'Todo category deleted successfully!!',
+            'data' => $todo
+        ]);
     }
 }

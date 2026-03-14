@@ -10,6 +10,7 @@ use App\Http\Controllers\TodosController;
 // })->middleware('auth:sanctum');
 
 Route::get('/todo-category', [TodoCategoryController::class, 'index']);
+Route::post('/todocategory', [TodoCategoryController::class, 'store']);
 
 Route::get('/todo-category-mapping', [TodoCategoryMappingController::class, 'index']);
 
